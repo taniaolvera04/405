@@ -16,7 +16,8 @@ if($action==='add'){
     $c=$_POST['am'];
     $d=$_POST['telefono'];
 
-    $sql="INSERT INTO contacto VALUES (null,'$a','$b','$c','$d')";
+    $sql = "CALL insertarContacto('$a', '$b', '$c', '$d')";
+        
     if($cx->query($sql)){
        $valido['success']=true;
        $valido['mensaje']="SE GUARDÓ CORRECTAMENTE";
@@ -35,7 +36,7 @@ echo json_encode($valido);
 } elseif($action==='selectAll'){
 
     header('Content-Type: text/html; charset=utf-8');
-    $sql="SELECT * FROM contacto";
+    $sql="CALL cargarContactos;";
 
 $registros=array('data'=>array());
 $res=$cx->query($sql);
@@ -53,7 +54,7 @@ echo json_encode($registros);
     if($_POST){
     $id=$_POST['id'];
 
-    $sql="DELETE FROM contacto WHERE id=$id";
+    $sql="CALL eliminarContacto('$id');";
     if($cx->query($sql)){
        $valido['success']=true;
        $valido['mensaje']="SE ELIMINÓ CORRECTAMENTE";
@@ -80,7 +81,7 @@ echo json_encode($valido);
             'telefono'=>"");
             if ($_POST) {
                 $id = $_POST['id'];
-                $sql = "SELECT * FROM contacto WHERE id=$id";
+                $sql = "CALL selectContacto('$id');";
             
                 $res = $cx->query($sql);
                 $row = $res->fetch_array();
@@ -113,11 +114,7 @@ echo json_encode($valido);
     $c=$_POST['am'];
     $d=$_POST['telefono'];
 
-    $sql="UPDATE contacto SET nombre='$a',
-    ap='$b',
-    am='$c',
-    telefono='$d'
-    WHERE id=$id";
+    $sql="CALL actualizarContacto('$id','$a','$b','$c','$d')";
 
     if($cx->query($sql)){
        $valido['success']=true;
